@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->text('content');
             $table->timestamps();
+            $table->softDeletes();
+
+            // Supports the default listing (newest first) and the per-user filter.
+            $table->index('created_at');
+            $table->index(['user_id', 'created_at']);
         });
     }
 
