@@ -1,0 +1,43 @@
+# Usage: cp .env.example .env && docker compose up --build
+x-app: &app
+  build: .
+  env_file: .env
+  environment:
+    DB_HOST: db
+    REVERB_HOST: reverb # the API publishes to Reverb over the internal network
+  depends_on:
+    db:
+      condition: service_healthy
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-chat_api}
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 5s
+      retries: 10
+
+  api:
+    <<: *app
+    command: sh -c "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
+    ports:
+      - "8000:8000"
+
+  reverb:
+    <<: *app
+    command: php artisan reverb:start --host=0.0.0.0 --port=8080
+    ports:
+      - "8080:8080"
+
+  queue:
+    <<: *app
+    command: php artisan queue:work --tries=3
+
+volumes:
+  pgdata:
