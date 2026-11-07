@@ -12,7 +12,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.3",
+        "php": "^8.5",
         "laravel/framework": "^13.17",
         "laravel/reverb": "^1.0",
         "laravel/sanctum": "^4.0",
