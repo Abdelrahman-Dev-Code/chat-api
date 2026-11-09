@@ -1,0 +1,17 @@
+{
+    "$schema": "https://www.schemastore.org/package.json",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite"
+    },
+    "dependencies": {
+        "laravel-echo": "^2.6.3",
+        "pusher-js": "^8.6.0"
+    },
+    "devDependencies": {
+        "laravel-vite-plugin": "^2.1.0",
+        "vite": "^7.3.7"
+    }
+}

@@ -1,0 +1,256 @@
+/*
+ * Arabic / right-to-left layout.
+ *
+ * The whole document switches direction through the `dir` attribute, so flex
+ * and grid order already mirror. This file only corrects the physical
+ * properties that cannot flip on their own (left/right offsets, radii,
+ * drawer transforms, decorative gradients) and tunes Arabic typography.
+ */
+
+/* Typography -------------------------------------------------------------- */
+
+html[dir="rtl"] {
+    --font-sans: "Segoe UI", "Noto Naskh Arabic", "Noto Sans Arabic", "Geeza Pro", Tahoma, Arial, sans-serif;
+}
+
+html[dir="rtl"] body {
+    line-height: 1.65;
+}
+
+/* Arabic is a connected script: positive tracking breaks letter joins and
+   tight negative tracking makes headlines hard to read. */
+html[dir="rtl"] :is(h1, h2, h3, h4, h5, h6, p, span, a, button, label, legend, time, strong, em, small) {
+    letter-spacing: normal;
+}
+
+html[dir="rtl"] :is(h1, h2, h3) {
+    line-height: 1.3;
+}
+
+html[dir="rtl"] .message__bubble,
+html[dir="rtl"] .composer__textarea,
+html[dir="rtl"] .edit-form__textarea {
+    line-height: 1.7;
+}
+
+/* Readability of mixed Latin fragments inside Arabic copy (Google, OAuth). */
+html[dir="rtl"] .button__label,
+html[dir="rtl"] .auth__trust,
+html[dir="rtl"] .auth__footer {
+    unicode-bidi: plaintext;
+}
+
+/* Workspace shell --------------------------------------------------------- */
+
+html[dir="rtl"] .sidebar {
+    border-right: 0;
+    border-left: 1px solid var(--border);
+}
+
+html[dir="rtl"] .sidebar__room,
+html[dir="rtl"] .sidebar__logout,
+html[dir="rtl"] .account__action,
+html[dir="rtl"] .account__meta,
+html[dir="rtl"] .reply-quote {
+    text-align: right;
+}
+
+html[dir="rtl"] .account__menu {
+    right: auto;
+    left: 0;
+    transform-origin: top left;
+}
+
+@media (max-width: 640px) {
+    html[dir="rtl"] .account__menu {
+        right: 0.65rem;
+        left: 0.65rem;
+    }
+}
+
+html[dir="rtl"] .skip-link {
+    right: 0.75rem;
+    left: auto;
+}
+
+html[dir="rtl"] .toast-region {
+    right: auto;
+    left: 1.25rem;
+}
+
+@media (max-width: 640px) {
+    html[dir="rtl"] .toast-region {
+        right: 0.75rem;
+        left: 0.75rem;
+    }
+}
+
+/* Search and select controls --------------------------------------------- */
+
+html[dir="rtl"] .search__icon {
+    right: 0.65rem;
+    left: auto;
+}
+
+html[dir="rtl"] .search__input {
+    padding: 0.45rem 2.2rem 0.45rem 0.75rem;
+}
+
+html[dir="rtl"] .search__clear,
+html[dir="rtl"] .sidebar__search-clear {
+    right: auto;
+    left: 0.5rem;
+}
+
+html[dir="rtl"] .sidebar__search-clear {
+    left: 0.35rem;
+}
+
+html[dir="rtl"] .sidebar__search-icon {
+    right: 0.65rem;
+    left: auto;
+}
+
+html[dir="rtl"] .sidebar__search-input {
+    padding: 0.5rem 2.1rem 0.5rem 2rem;
+}
+
+html[dir="rtl"] .select select {
+    padding: 0.45rem 0.75rem 0.45rem 2rem;
+}
+
+html[dir="rtl"] .select__chevron {
+    right: auto;
+    left: 0.65rem;
+}
+
+/* Header ------------------------------------------------------------------ */
+
+html[dir="rtl"] .chat__header-meta,
+html[dir="rtl"] .composer__send,
+html[dir="rtl"] .sidebar__profile-actions {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+/* Messages ---------------------------------------------------------------- */
+
+html[dir="rtl"] .message__bubble {
+    border-radius: 16px 4px 16px 16px;
+}
+
+html[dir="rtl"] .message--grouped:not(.message--own) .message__bubble {
+    border-radius: 16px;
+}
+
+html[dir="rtl"] .message--own .message__bubble {
+    border-radius: 4px 16px 16px 16px;
+}
+
+html[dir="rtl"] .message--own.message--grouped .message__bubble {
+    border-radius: 16px;
+}
+
+html[dir="rtl"] .message--own .edit-form {
+    border-top-right-radius: 16px;
+    border-top-left-radius: 5px;
+}
+
+html[dir="rtl"] .reply-quote {
+    padding: 0.45rem 0.45rem 0.45rem 0.6rem;
+}
+
+/* Popovers anchored to the message actions. */
+html[dir="rtl"] .reaction-picker__popover {
+    right: 0;
+    left: auto;
+    transform-origin: bottom right;
+}
+
+html[dir="rtl"] .message--own .reaction-picker__popover {
+    right: auto;
+    left: 0;
+    transform-origin: bottom left;
+}
+
+/* Drawer and collapsed rail ---------------------------------------------- */
+
+html[dir="rtl"] .workspace.is-sidebar-collapsed .sidebar__room--active::before {
+    right: 0.2rem;
+    left: auto;
+}
+
+@media (max-width: 900px) {
+    html[dir="rtl"] .sidebar {
+        right: 0;
+        left: auto;
+        border-right: 0;
+        border-left: 1px solid var(--border);
+        transform: translateX(102%);
+    }
+
+    html[dir="rtl"] .workspace.is-drawer-open .sidebar {
+        transform: none;
+    }
+}
+
+/* Sign-in ---------------------------------------------------------------- */
+
+html[dir="rtl"] .auth__art-glow {
+    right: auto;
+    left: -8rem;
+}
+
+html[dir="rtl"] .auth__mock-avatar + .auth__mock-avatar {
+    margin-right: -0.45rem;
+    margin-left: 0;
+}
+
+html[dir="rtl"] .auth__mock-live {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+html[dir="rtl"] .auth__mock-bubble {
+    border-radius: 12px 12px 4px 12px;
+}
+
+html[dir="rtl"] .auth__mock-bubble--own {
+    border-radius: 12px 12px 12px 4px;
+}
+
+html[dir="rtl"] .auth__mock-composer {
+    padding: 0.42rem 0.7rem 0.42rem 0.5rem;
+}
+
+/* Directional icons ------------------------------------------------------ */
+
+html[dir="rtl"] .icon--arrow-right,
+html[dir="rtl"] .icon--send,
+html[dir="rtl"] .icon--reply,
+html[dir="rtl"] .icon--logout,
+html[dir="rtl"] .icon--panel-left {
+    transform: scaleX(-1);
+}
+
+html[dir="rtl"] .workspace.is-sidebar-collapsed .sidebar__collapse .icon {
+    transform: scaleX(-1) rotate(180deg);
+}
+
+/* Touch, focus and contrast ---------------------------------------------- */
+
+html[dir="rtl"] .message__time,
+html[dir="rtl"] .message__edited {
+    font-feature-settings: "tnum";
+}
+
+html[dir="rtl"] ::placeholder {
+    opacity: 1;
+}
+
+/* Keep long Arabic words inside bubbles instead of overflowing the column. */
+html[dir="rtl"] .message__bubble,
+html[dir="rtl"] .reply-quote__content,
+html[dir="rtl"] .composer__reply-content {
+    overflow-wrap: anywhere;
+}

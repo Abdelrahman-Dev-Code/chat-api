@@ -1,0 +1,121 @@
+/* Design tokens ----------------------------------------------------------- */
+/* One accent, calm neutral surfaces, and a deliberate light/dark pairing.   */
+
+:root {
+    color-scheme: light;
+
+    --bg: #f4f5fa;
+    --bg-glow-1: rgb(129 140 248 / 16%);
+    --bg-glow-2: rgb(56 189 248 / 12%);
+
+    --surface: #ffffff;
+    --surface-soft: #f8f9fc;
+    --surface-sunken: #eef0f7;
+    --surface-hover: #f1f3f9;
+
+    --text: #151a2d;
+    --text-muted: #5e667c;
+    --text-subtle: #626b82;
+
+    --border: #e3e6ef;
+    --border-strong: #cdd2e0;
+
+    --primary: #5b5bd6;
+    --primary-hover: #4b4ac5;
+    --primary-soft: #efefff;
+    --primary-softer: #f6f6ff;
+    --primary-contrast: #ffffff;
+    --accent-text: #4f46c8;
+
+    --danger: #b42318;
+    --danger-button: #c9372c;
+    --danger-button-hover: #b02a22;
+    --danger-soft: #fff1f0;
+    --danger-border: #ffd5d2;
+
+    --success: #067647;
+    --success-soft: #ecfdf3;
+    --success-border: #b7ebc9;
+
+    --warning: #b54708;
+
+    --bubble-other: #ffffff;
+    --bubble-own: #5b5bd6;
+    --bubble-own-text: #ffffff;
+    --bubble-own-shadow: 0 8px 18px rgb(91 91 214 / 20%);
+
+    --focus-ring: rgb(91 91 214 / 38%);
+    --avatar-ring: rgb(255 255 255 / 90%);
+    --backdrop: rgb(15 18 30 / 45%);
+    --scrollbar: #d3d8e6;
+
+    --shadow-xs: 0 1px 2px rgb(20 25 45 / 5%);
+    --shadow-sm: 0 2px 6px rgb(20 25 45 / 6%);
+    --shadow-md: 0 12px 30px rgb(20 25 45 / 10%);
+    --shadow-lg: 0 30px 70px rgb(35 38 80 / 14%);
+
+    --radius-xs: 8px;
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+
+    --font-sans: "Segoe UI", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+
+    --topbar-height: 4.5rem;
+}
+
+html[data-theme="dark"] {
+    color-scheme: dark;
+
+    --bg: #0a0d16;
+    --bg-glow-1: rgb(99 102 241 / 17%);
+    --bg-glow-2: rgb(56 189 248 / 8%);
+
+    --surface: #151a28;
+    --surface-soft: #101521;
+    --surface-sunken: #0d111c;
+    --surface-hover: #1d2434;
+
+    --text: #eef1f8;
+    --text-muted: #a7b0c5;
+    --text-subtle: #8f99b0;
+
+    --border: #252c3e;
+    --border-strong: #37405a;
+
+    --primary: #5b5bd6;
+    --primary-hover: #6c6af0;
+    --primary-soft: rgb(108 106 240 / 16%);
+    --primary-softer: rgb(108 106 240 / 8%);
+    --primary-contrast: #ffffff;
+    --accent-text: #b4bdff;
+
+    --danger: #ff9b91;
+    --danger-button: #c9372c;
+    --danger-button-hover: #b02a22;
+    --danger-soft: rgb(255 99 84 / 12%);
+    --danger-border: rgb(255 99 84 / 28%);
+
+    --success: #6ee7b7;
+    --success-soft: rgb(16 185 129 / 12%);
+    --success-border: rgb(16 185 129 / 28%);
+
+    --warning: #fdb022;
+
+    --bubble-other: #1b2232;
+    --bubble-own: #5b5bd6;
+    --bubble-own-text: #ffffff;
+    --bubble-own-shadow: 0 10px 24px rgb(0 0 0 / 28%);
+
+    --focus-ring: rgb(165 180 252 / 55%);
+    --avatar-ring: rgb(255 255 255 / 12%);
+    --backdrop: rgb(2 5 12 / 66%);
+    --scrollbar: #39435c;
+
+    --shadow-xs: 0 1px 2px rgb(0 0 0 / 30%);
+    --shadow-sm: 0 2px 8px rgb(0 0 0 / 25%);
+    --shadow-md: 0 16px 40px rgb(0 0 0 / 35%);
+    --shadow-lg: 0 32px 80px rgb(0 0 0 / 45%);
+}

@@ -1,0 +1,40 @@
+<?php
+
+return [
+    'required' => 'حقل :attribute مطلوب.',
+    'string' => 'يجب أن يكون :attribute نصًا.',
+    'integer' => 'يجب أن يكون :attribute عددًا صحيحًا.',
+    'array' => 'يجب أن يكون :attribute قائمة.',
+    'in' => 'القيمة المحددة في :attribute غير صالحة.',
+    'date' => 'يجب أن يكون :attribute تاريخًا صالحًا.',
+    'date_format' => 'يجب أن يطابق :attribute الصيغة :format.',
+    'before_or_equal' => 'يجب أن يكون :attribute تاريخًا سابقًا أو مساويًا لـ :date.',
+    'after_or_equal' => 'يجب أن يكون :attribute تاريخًا لاحقًا أو مساويًا لـ :date.',
+    'max' => [
+        'array' => 'يجب ألا يحتوي :attribute على أكثر من :max عنصرًا.',
+        'file' => 'يجب ألا يزيد حجم :attribute عن :max كيلوبايت.',
+        'numeric' => 'يجب ألا تزيد قيمة :attribute عن :max.',
+        'string' => 'يجب ألا يتجاوز :attribute :max حرفًا.',
+    ],
+    'min' => [
+        'array' => 'يجب أن يحتوي :attribute على :min عنصرًا على الأقل.',
+        'file' => 'يجب ألا يقل حجم :attribute عن :min كيلوبايت.',
+        'numeric' => 'يجب ألا تقل قيمة :attribute عن :min.',
+        'string' => 'يجب أن يحتوي :attribute على :min حرفًا على الأقل.',
+    ],
+    'attributes' => [
+        'message' => 'الرسالة',
+        'content' => 'المحتوى',
+        'newMessage' => 'الرسالة',
+        'editContent' => 'الرسالة',
+        'search' => 'البحث',
+        'page' => 'الصفحة',
+        'user_id' => 'المرسِل',
+        'user_ids' => 'المرسِلون',
+        'date_preset' => 'التاريخ',
+        'date_from' => 'تاريخ البداية',
+        'date_to' => 'تاريخ النهاية',
+        'code' => 'رمز التفويض',
+        'state' => 'حالة OAuth',
+    ],
+];

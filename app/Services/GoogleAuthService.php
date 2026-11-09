@@ -12,11 +12,12 @@ use Laravel\Socialite\Contracts\User as GoogleUser;
 use Laravel\Socialite\Two\AbstractProvider;
 
 /**
- * Google OAuth 2.0 sign-in for a stateless API.
+ * Google OAuth 2.0 sign-in for the API and the Livewire web UI.
  *
  * Protection against spoofed callbacks:
  *  1. A one-time random `state` is issued with the redirect URL and must come
- *     back unchanged on the callback (CSRF / replay protection).
+ * back unchanged on the callback (CSRF / replay protection). Web flows also
+ * bind the state to the browser session, preventing login CSRF.
  *  2. The profile is never taken from the client: the authorization `code` is
  *     exchanged server-to-server with Google using our client secret.
  *  3. Only Google accounts with a verified e-mail address are accepted.
@@ -35,14 +36,18 @@ class GoogleAuthService
     /**
      * Build the Google consent-screen URL the client should open.
      */
-    public function redirectUrl(): string
+    public function redirectUrl(?string $redirectUri = null, ?string $stateContext = null): string
     {
         $state = Str::random(40);
 
-        $this->cache->put(self::STATE_KEY_PREFIX.$state, true, self::STATE_TTL_SECONDS);
+        $this->cache->put(
+            self::STATE_KEY_PREFIX.$state,
+            $stateContext === null ? true : $this->fingerprint($stateContext),
+            self::STATE_TTL_SECONDS,
+        );
 
-        return $this->google()
-            ->with(['state' => $state])
+        return $this->google($redirectUri)
+            ->with(['state' => $state, 'prompt' => 'select_account'])
             ->redirect()
             ->getTargetUrl();
     }
@@ -52,14 +57,19 @@ class GoogleAuthService
      *
      * @throws AuthenticationException
      */
-    public function authenticate(string $state): User
-    {
-        if (! $this->cache->pull(self::STATE_KEY_PREFIX.$state)) {
+    public function authenticate(
+        string $state,
+        ?string $redirectUri = null,
+        ?string $stateContext = null,
+    ): User {
+        $expected = $this->cache->pull(self::STATE_KEY_PREFIX.$state);
+
+        if ($expected === null || ($stateContext !== null && ! hash_equals((string) $expected, $this->fingerprint($stateContext)))) {
             throw new AuthenticationException('Invalid or expired OAuth state.');
         }
 
         try {
-            $googleUser = $this->google()->user();
+            $googleUser = $this->google($redirectUri)->user();
         } catch (GuzzleException) {
             throw new AuthenticationException('Unable to verify the Google authorization code.');
         }
@@ -83,7 +93,7 @@ class GoogleAuthService
 
     private function findOrCreateUser(GoogleUser $googleUser): User
     {
-        $email = $googleUser->getEmail() |> trim(...) |> mb_strtolower(...);
+        $email = mb_strtolower(trim($googleUser->getEmail()));
 
         // Match on the Google ID first, then link an existing account by its verified e-mail.
         $user = User::query()->where('google_id', $googleUser->getId())->first()
@@ -101,11 +111,20 @@ class GoogleAuthService
         return $user;
     }
 
-    private function google(): AbstractProvider
+    private function fingerprint(string $stateContext): string
+    {
+        return hash('sha256', $stateContext);
+    }
+
+    private function google(?string $redirectUri = null): AbstractProvider
     {
         /** @var AbstractProvider $driver */
-        $driver = $this->socialite->driver('google');
+        $driver = $this->socialite->driver('google')->stateless();
 
-        return $driver->stateless();
+        if ($redirectUri !== null) {
+            $driver->redirectUrl($redirectUri);
+        }
+
+        return $driver;
     }
 }

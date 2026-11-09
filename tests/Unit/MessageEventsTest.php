@@ -63,20 +63,20 @@ class MessageEventsTest extends TestCase
         $message = $this->message();
         $message->user->email = 'sara@example.com';
 
-        $this->assertArrayNotHasKey('email', new MessageSent($message)->broadcastWith()['user']);
+        $this->assertArrayNotHasKey('email', (new MessageSent($message))->broadcastWith()['user']);
     }
 
     #[Test]
     public function deleted_event_only_carries_the_message_id(): void
     {
-        $this->assertSame(['id' => 7], new MessageDeleted($this->message())->broadcastWith());
+        $this->assertSame(['id' => 7], (new MessageDeleted($this->message()))->broadcastWith());
     }
 
     private function message(): Message
     {
-        $author = new User()->forceFill(['id' => 3, 'name' => 'Sara', 'avatar' => null]);
+        $author = (new User)->forceFill(['id' => 3, 'name' => 'Sara', 'avatar' => null]);
 
-        return new Message()
+        return (new Message)
             ->forceFill(['id' => 7, 'user_id' => 3, 'content' => 'Hello', 'created_at' => now(), 'updated_at' => now()])
             ->setRelation('user', $author);
     }

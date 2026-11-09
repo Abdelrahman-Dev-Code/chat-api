@@ -52,7 +52,7 @@ abstract class MessageEvent implements ShouldBroadcast
      */
     protected function messageSnapshot(Message $message): array
     {
-        return json_decode(new MessageResource($message->loadMissing('user'))->toJson(), true);
+        return json_decode((new MessageResource($message->loadMissing('user')))->toJson(), true);
     }
 
     /**

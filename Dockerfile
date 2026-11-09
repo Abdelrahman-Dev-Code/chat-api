@@ -1,4 +1,21 @@
-FROM php:8.5-cli-alpine
+# ---------------------------------------------------------------------------
+# Stage 1: compile the Vite bundles (CSS + Livewire/Echo JavaScript)
+# ---------------------------------------------------------------------------
+FROM node:22-alpine AS assets
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY resources ./resources
+COPY vite.config.js ./
+RUN npm run build
+
+# ---------------------------------------------------------------------------
+# Stage 2: runtime image
+# ---------------------------------------------------------------------------
+FROM php:8.3-cli-alpine
 
 RUN apk add --no-cache postgresql-dev \
     && docker-php-ext-install pdo_pgsql pcntl
@@ -12,6 +29,8 @@ COPY composer.json composer.lock ./
 RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-interaction
 
 COPY . .
+COPY --from=assets /app/public/build ./public/build
+
 RUN composer dump-autoload --optimize --no-dev \
     && chown -R www-data:www-data storage bootstrap/cache
 

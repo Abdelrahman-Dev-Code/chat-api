@@ -18,10 +18,18 @@ class SaveMessageRequest extends FormRequest
     /**
      * @return array<string, ValidationRule|array<mixed>|string>
      */
+    public static function contentRules(): array
+    {
+        return ['required', 'string', 'max:'.self::MAX_LENGTH];
+    }
+
+    /**
+     * @return array<string, ValidationRule|array<mixed>|string>
+     */
     public function rules(): array
     {
         return [
-            'content' => ['required', 'string', 'max:'.self::MAX_LENGTH],
+            'content' => self::contentRules(),
         ];
     }
 

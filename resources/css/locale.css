@@ -1,0 +1,100 @@
+/* Language switcher ------------------------------------------------------- */
+
+.locale-switcher {
+    display: inline-flex;
+    flex: 0 0 auto;
+}
+
+.locale-switcher__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.38rem;
+    min-height: 2.35rem;
+    padding: 0.35rem 0.65rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text-muted);
+    background: var(--surface-soft);
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+        color 150ms ease,
+        background-color 150ms ease,
+        border-color 150ms ease,
+        box-shadow 150ms ease;
+}
+
+.locale-switcher__button:hover {
+    border-color: var(--border-strong);
+    color: var(--text);
+    background: var(--surface-hover);
+}
+
+.locale-switcher__button:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+.locale-switcher__button--compact {
+    min-height: 2.05rem;
+    padding: 0.28rem 0.52rem;
+    font-size: 0.69rem;
+}
+
+.locale-switcher__label {
+    white-space: nowrap;
+}
+
+.sidebar__profile-actions {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.25rem;
+    margin-inline-start: auto;
+}
+
+.chat__locale {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .chat__locale {
+        display: inline-flex;
+    }
+}
+
+@media (max-width: 480px) {
+    .chat__locale .locale-switcher__label {
+        display: none;
+    }
+}
+
+@media (max-width: 900px) {
+    .locale-switcher__button,
+    .chat__locale .locale-switcher__button {
+        min-height: 2.75rem;
+        min-width: 2.75rem;
+    }
+}
+
+/* Collapsed desktop rail: stack the language and theme controls icon-only. */
+@media (min-width: 901px) {
+    .workspace.is-sidebar-collapsed .sidebar__profile-actions {
+        flex-direction: column;
+        gap: 0.3rem;
+        margin-inline-start: 0;
+    }
+
+    .workspace.is-sidebar-collapsed .locale-switcher__label {
+        display: none;
+    }
+
+    .workspace.is-sidebar-collapsed .locale-switcher__button {
+        min-width: 2.05rem;
+        min-height: 2.05rem;
+        padding: 0.28rem;
+    }
+}

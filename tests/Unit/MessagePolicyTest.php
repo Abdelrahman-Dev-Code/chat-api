@@ -41,11 +41,11 @@ class MessagePolicyTest extends TestCase
 
     private function user(int $id): User
     {
-        return new User()->forceFill(['id' => $id]);
+        return (new User)->forceFill(['id' => $id]);
     }
 
     private function messageBy(User $author): Message
     {
-        return new Message()->forceFill(['user_id' => $author->id]);
+        return (new Message)->forceFill(['user_id' => $author->id]);
     }
 }

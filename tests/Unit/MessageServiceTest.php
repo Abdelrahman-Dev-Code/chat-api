@@ -8,6 +8,7 @@ use App\Events\MessageUpdated;
 use App\Models\Message;
 use App\Models\User;
 use App\Services\MessageService;
+use Illuminate\Contracts\Pagination\Paginator as PaginatorContract;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
@@ -42,6 +43,19 @@ class MessageServiceTest extends TestCase
     }
 
     #[Test]
+    public function chat_pagination_avoids_a_total_count_query(): void
+    {
+        Message::factory()->count(MessageService::PER_PAGE + 1)->create();
+
+        $page = $this->service->paginateForChat();
+
+        $this->assertInstanceOf(PaginatorContract::class, $page);
+        $this->assertSame(MessageService::PER_PAGE, $page->perPage());
+        $this->assertTrue($page->hasMorePages());
+        $this->assertTrue($page->first()->relationLoaded('user'));
+    }
+
+    #[Test]
     public function it_filters_messages_by_authors(): void
     {
         [$sara, $omar, $lina] = User::factory()->count(3)->create();
@@ -64,6 +78,21 @@ class MessageServiceTest extends TestCase
 
         $this->assertDatabaseHas('messages', ['id' => $message->id, 'user_id' => $author->id, 'content' => 'Hello']);
         Event::assertDispatched(MessageSent::class, fn (MessageSent $event) => $event->payload['id'] === $message->id);
+    }
+
+    #[Test]
+    public function chat_sending_persists_the_message_before_deferred_broadcasting(): void
+    {
+        $author = User::factory()->create();
+
+        $message = $this->service->sendFromChat($author, 'Sent from chat');
+
+        $this->assertDatabaseHas('messages', [
+            'id' => $message->id,
+            'user_id' => $author->id,
+            'content' => 'Sent from chat',
+        ]);
+        $this->assertTrue($message->relationLoaded('user'));
     }
 
     #[Test]

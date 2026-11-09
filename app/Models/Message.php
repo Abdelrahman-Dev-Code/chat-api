@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Policies\MessagePolicy;
 use Database\Factories\MessageFactory;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
@@ -55,6 +56,33 @@ class Message extends Model
     protected function fromUsers(Builder $query, array $userIds): void
     {
         $query->whereIn('user_id', $userIds);
+    }
+
+    /**
+     * Limit the query to messages containing the search term, ignoring case.
+     */
+    #[Scope]
+    protected function search(Builder $query, string $term): void
+    {
+        $query->whereRaw('LOWER(content) LIKE ?', ['%'.mb_strtolower($term).'%']);
+    }
+
+    /**
+     * Limit the query to messages created on or after the given date.
+     */
+    #[Scope]
+    protected function fromDate(Builder $query, DateTimeInterface $date): void
+    {
+        $query->where('created_at', '>=', $date);
+    }
+
+    /**
+     * Limit the query to messages created on or before the given date.
+     */
+    #[Scope]
+    protected function toDate(Builder $query, DateTimeInterface $date): void
+    {
+        $query->where('created_at', '<=', $date);
     }
 
     /**

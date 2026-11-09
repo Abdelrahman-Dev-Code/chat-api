@@ -71,6 +71,18 @@ class GoogleAuthServiceTest extends TestCase
     }
 
     #[Test]
+    public function a_browser_bound_state_is_verified_before_authentication(): void
+    {
+        $state = 'browser-bound-state';
+        app(Cache::class)->put('oauth:google:state:'.$state, hash('sha256', 'browser-token'), 60);
+        $this->googleReturns($this->googleUser());
+
+        $user = app(GoogleAuthService::class)->authenticate($state, stateContext: 'browser-token');
+
+        $this->assertSame('sara@example.com', $user->email);
+    }
+
+    #[Test]
     public function a_new_user_is_created_from_a_verified_google_account(): void
     {
         $this->googleReturns($this->googleUser(email: ' Sara@Example.com '));
@@ -151,7 +163,7 @@ class GoogleAuthServiceTest extends TestCase
 
     private function googleUser(string $email = 'sara@example.com', string $name = 'Sara', bool $emailVerified = true): SocialiteUser
     {
-        return new SocialiteUser()
+        return (new SocialiteUser)
             ->setRaw(['sub' => 'google-123', 'email' => $email, 'email_verified' => $emailVerified])
             ->map(['id' => 'google-123', 'name' => $name, 'email' => $email, 'avatar' => 'https://example.com/a.png']);
     }

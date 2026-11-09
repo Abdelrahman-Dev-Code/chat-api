@@ -17,6 +17,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Browser Connection
+    |--------------------------------------------------------------------------
+    |
+    | The browser may connect to Reverb through a public host that differs
+    | from the internal host used by the Laravel server.
+    |
+    */
+
+    'client' => [
+        'host' => env('REVERB_PUBLIC_HOST', env('REVERB_HOST', 'localhost')),
+        'port' => (int) env('REVERB_PUBLIC_PORT', env('REVERB_PORT', 8080)),
+        'scheme' => env('REVERB_PUBLIC_SCHEME', env('REVERB_SCHEME', 'http')),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Reverb Servers
     |--------------------------------------------------------------------------
     |
